@@ -1,0 +1,35 @@
+{
+  "name": "churchmembers-ba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start2": "node index.js",
+    "start": "node src/index.js",
+    "start:dev": "babel-node index.js",
+    "dev": "nodemon",
+    "addPerson": "node .\\scripts\\dataPeople.js"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-datasource-mongodb": "^0.5.4",
+    "apollo-server": "^3.11.1",
+    "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.6",
+    "graphql": "^16.6.0",
+    "jsonwebtoken": "^9.0.0",
+    "loadsh": "0.0.4",
+    "mongoose": "^6.8.2",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.20.2"
+  }
+}

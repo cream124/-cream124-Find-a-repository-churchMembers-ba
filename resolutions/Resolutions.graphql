@@ -1,0 +1,18 @@
+# name
+# createdAt
+# [todoId]
+
+type Resolution {
+  _id: String!
+  name: String!
+}
+
+type Query {
+  hi(id: ID!): String
+  resolutions: [Resolution] 
+}
+
+type Mutation {
+  login(email: String): String
+  createResolution(name: String!): Resolution
+}
