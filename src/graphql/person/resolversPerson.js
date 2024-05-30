@@ -61,8 +61,8 @@ const validateEmail = async (email, user) => {
   }
 };
 
-const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized) => {
- 
+const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal) => {
+ console.log('=sp==========', spiritual);
     await validateNames(name, lastName, motherLastName);
     await validateCi(ci);
     await validateEmail(email, user);
@@ -90,7 +90,9 @@ const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, p
       userName, 
       password: encryptedPassword,
       christian,
-      baptized
+      baptized,
+      spiritual,
+      legal
     });
     console.log('======', personId);
     return Person.findOne(personId);
@@ -273,9 +275,9 @@ module.exports = {
   },
   Mutation: {
     createPerson(obj, { name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state,
-      email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized }, context) {
+      email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal }, context) {
       console.log('------', name);
-      return addPerson(name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized);
+      return addPerson(name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal);
     },
     updateStatePerson(obj, { ids, state, approvalId, approvalDate }, context) {
       return updateState(ids, state, approvalId, approvalDate);

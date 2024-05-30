@@ -1,5 +1,5 @@
 // import mongoose from "mongoose";
-const {model, Schema} = require("mongoose");
+const { model, Schema } = require("mongoose");
 
 module.exports = model("person", {
   name: String,
@@ -13,9 +13,10 @@ module.exports = model("person", {
   location: String,
   state: String,
   email: String,
-  registerId : String,
-  registerName: String,
+  registerId: String,
   registerDate: String,
+  uptadeId: String,
+  updateDate: String,
   approvalId: String,
   approvalDate: String,
   user: Boolean,
@@ -23,5 +24,39 @@ module.exports = model("person", {
   userName: String,
   password: String,
   christian: Boolean,
-  baptized: Boolean
+  baptized: Boolean,
+  spiritual: {
+    christian: Boolean,
+    baptized: Boolean,
+    placeAccept: String,
+    namePlaceAccept: String,
+    dateAccept: String,
+    nameBaptizedChurch: String,
+    denominationBaptizedChurch: String,
+    palceBaptized: String,
+    dateBaptized: String,
+    certificateBaptizedFoto: String,
+  },
+  legal: {
+    legalInformation: Boolean,
+    oficialiaN: String,
+    libroN: String,
+    partidaN: String,
+    folioN: String,
+    oficialiaDepartamento: String,
+    oficialiaProvincia: String,
+    oficialiaDate: String,
+    departamentoNacimiento: String,
+    provinciaNacimiento: String,
+    localidadNacimiento: String,
+    nacionalidadNacimiento: String,
+    fechaNacimiento: String,
+    nombresPadre: String,
+    apellidosPadre: String,
+    nombresMadre: String,
+    apellidosMadre: String,
+    localidadEmicion: String,
+    fechaEmicion: String,
+    certificadoFoto: String,
+  },
 });
