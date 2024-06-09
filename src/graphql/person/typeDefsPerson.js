@@ -7,6 +7,8 @@ module.exports = gql`
     lastName: String
     motherLastName: String
     birthDate: String
+    gender: String
+    civilStatus: String
     ci: String
     photo: String
     phone: String
@@ -17,7 +19,7 @@ module.exports = gql`
     registerId: String
     registerDate: String
     registerName: String
-    uptadeId: String
+    updateId: String
     updateDate: String
     approvalId: String
     approvalDate: String
@@ -25,36 +27,54 @@ module.exports = gql`
     level: Int
     userName: String
     password: String
-    christian: Boolean
-    baptized: Boolean
     spiritual: Spiritual
     legal: Legal
   }
 
   type Spiritual {
     christian: Boolean
-    baptized: Boolean
+    churchName: String
+    department: String
+    province: String
+    locality: String
     placeAccept: String
     namePlaceAccept: String
     dateAccept: String
+    timeAccept: String
+    baptized: Boolean
     nameBaptizedChurch: String
     denominationBaptizedChurch: String
     palceBaptized: String
     dateBaptized: String
-    certificateBaptizedFoto: String
+    becameMemberFor: String
+    libroN: String
+    folioN: String
+    membershipRegistrationDate: String
+    membershipRegistrationTime: String
+    baptizedCertificatePhoto: String
   }
 
   input Spiritual1 {
     christian: Boolean
-    baptized: Boolean
+    churchName: String
+    department: String
+    province: String
+    locality: String
     placeAccept: String
     namePlaceAccept: String
     dateAccept: String
+    timeAccept: String
+    baptized: Boolean
     nameBaptizedChurch: String
     denominationBaptizedChurch: String
     palceBaptized: String
     dateBaptized: String
-    certificateBaptizedFoto: String
+    becameMemberFor: String
+    libroN: String
+    folioN: String
+    membershipRegistrationDate: String
+    membershipRegistrationTime: String
+    baptizedCertificatePhoto: String
   }
 
   type Legal {
@@ -71,16 +91,17 @@ module.exports = gql`
     localidadNacimiento: String
     nacionalidadNacimiento: String
     fechaNacimiento: String
+    horaNacimiento: String
     nombresPadre: String
     apellidosPadre: String
     nombresMadre: String
     apellidosMadre: String
     localidadEmicion: String
     fechaEmicion: String
-    certificadoFoto: String
+    certificatePhoto: String
   }
 
-   input Legal1 {
+  input Legal1 {
     legalInformation: Boolean
     oficialiaN: String
     libroN: String
@@ -94,13 +115,14 @@ module.exports = gql`
     localidadNacimiento: String
     nacionalidadNacimiento: String
     fechaNacimiento: String
+    horaNacimiento: String
     nombresPadre: String
     apellidosPadre: String
     nombresMadre: String
     apellidosMadre: String
     localidadEmicion: String
     fechaEmicion: String
-    certificadoFoto: String
+    certificatePhoto: String
   }
 
   type PersonUser {
@@ -147,10 +169,12 @@ module.exports = gql`
   }
   type Mutation {
     createPerson(
-      name: String!
+      name: String
       lastName: String
       motherLastName: String
       birthDate: String
+      gender: String
+      civilStatus: String
       ci: String
       photo: String
       phone: String
@@ -166,8 +190,6 @@ module.exports = gql`
       level: Int
       userName: String
       password: String
-      christian: Boolean
-      baptized: Boolean
       spiritual: Spiritual1
       legal: Legal1
     ): Person
@@ -185,6 +207,8 @@ module.exports = gql`
       lastName: String
       motherLastName: String
       birthDate: String
+      gender: String
+      civilStatus: String
       ci: String
       photo: String
       phone: String
@@ -192,16 +216,13 @@ module.exports = gql`
       location: String
       state: String
       email: String
-      registerId: String
-      registerDate: String
-      approvalId: String
-      approvalDate: String
+      updateId: String
+      updateDate: String
       user: Boolean
-      level: Int
       userName: String
       password: String
-      christian: Boolean
-      baptized: Boolean
+      spiritual: Spiritual1
+      legal: Legal1
     ): Person
 
     loginPerson(login: Login): PersonUser

@@ -61,7 +61,7 @@ const validateEmail = async (email, user) => {
   }
 };
 
-const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal) => {
+const addPerson = async (name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal) => {
  console.log('=sp==========', spiritual);
     await validateNames(name, lastName, motherLastName);
     await validateCi(ci);
@@ -74,6 +74,8 @@ const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, p
       lastName,
       motherLastName,
       birthDate, 
+      gender,
+      civilStatus,
       ci, 
       photo,
       phone, 
@@ -89,8 +91,6 @@ const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, p
       level, 
       userName, 
       password: encryptedPassword,
-      christian,
-      baptized,
       spiritual,
       legal
     });
@@ -98,8 +98,9 @@ const addPerson = async (name, lastName, motherLastName, birthDate, ci, photo, p
     return Person.findOne(personId);
 };
 
-const updatePerson = async (_id, name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state,
-  email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized) => {
+const updatePerson = async (_id, name, lastName, motherLastName, birthDate, gender, civilStatus,
+  ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
+  userName, password, spiritual, legal ) => {
  
   await validateNames(name, lastName, motherLastName, _id);
   await validateCi(ci, _id);
@@ -109,23 +110,9 @@ const updatePerson = async (_id, name, lastName, motherLastName, birthDate, ci, 
   // console.log('=encryptedPassword==========', encryptedPassword);
   await Person.updateOne({_id},
     {
-      $set: {
-        name,
-        lastName,
-        motherLastName,
-        birthDate, 
-        ci, 
-        photo,
-        phone, 
-        address, 
-        location, 
-        state, 
-        email,
-        user, 
-        level, 
-        // password: encryptedPassword,
-        christian,
-        baptized
+      $set: { name, lastName, motherLastName, birthDate, gender, civilStatus,
+      ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
+      userName, password, spiritual, legal 
       }
     }
   );
@@ -156,9 +143,13 @@ const filterPersons = async (filter) => {
 
   const filteredPerson = persons.filter(function (per) {
     dayjs.extend(customParseFormat);
-    let fe = dayjs(per.birthDate, 'DD-MM-YYYY');
+    // let fe = dayjs(per.birthDate, 'DD-MM-YYYY');
+    let fe = dayjs(per.birthDate);
+    // console.log('****fe******', fe)
     const fe1 = dayjs(startDate, 'DD-MM-YYYY');
     let fe2 = dayjs(endDate, 'DD-MM-YYYY');
+    // console.log('****fe1******', fe1)
+    // console.log('****fe2******', fe2)
     
     const year = fe1.year();
     fe = fe.year(year);
@@ -238,14 +229,16 @@ module.exports = {
     },
     filterByStatePersons(obj, { state }, context) {
       console.log('------', state);
-      console.log('resolver-contex.isAuth-----------', context.isAuth);
+      console.log('resolver-contex.isAuth-ABN----------', context.isAuth);
       if (!context.isAuth) {
         throw new Error('Unauthenticated')
       }
       if (context.level === 700 ) {
         return filterByStatePersons({state});
       }
-      return filterByStatePersons({state, registerId: context._id});
+      // return filterByStatePersons({state});
+      // return filterByStatePersons({state, registerId: context._id});
+
     },
 
     filterPersons(obj, { filter }, context) {
@@ -274,20 +267,22 @@ module.exports = {
     }
   },
   Mutation: {
-    createPerson(obj, { name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state,
-      email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal }, context) {
+    createPerson(obj, { name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state,
+      email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal }, context) {
       console.log('------', name);
-      return addPerson(name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized, spiritual, legal);
+      return addPerson(name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal);
     },
     updateStatePerson(obj, { ids, state, approvalId, approvalDate }, context) {
       return updateState(ids, state, approvalId, approvalDate);
     },
 
-    updatePerson(obj, {id, name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state,
-      email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized }, context) {
+    updatePerson(obj, { id, name, lastName, motherLastName, birthDate, gender, civilStatus,
+      ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
+      userName, password, spiritual, legal }, context) {
       console.log('------', name);
-      return updatePerson(id, name, lastName, motherLastName, birthDate, ci, photo, phone, address, location, state,
-        email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, christian, baptized);
+      return updatePerson(id, name, lastName, motherLastName, birthDate, gender, civilStatus,
+        ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
+        userName, password, spiritual, legal );
     },
    
     loginPerson(_, {login: { userName, email, password}}) {
