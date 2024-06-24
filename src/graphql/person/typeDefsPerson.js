@@ -27,6 +27,8 @@ module.exports = gql`
     level: Int
     userName: String
     password: String
+    membershipType:String
+    age: Int
     spiritual: Spiritual
     legal: Legal
   }

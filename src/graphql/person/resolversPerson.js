@@ -1,6 +1,9 @@
 const { UserInputError } = require('apollo-server');
+const DateUtil = require('../../utility/dateUtil')
 const Person = require('../../models/person');
 const Person2 = require('../../models/person');
+const personFunctions = require('./functionsPerson');
+const membershipFunctions = require('../membership/functionsMembership');
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -259,18 +262,25 @@ module.exports = {
     }
   },
   Person: {
-    registerName: (person) => {
-      const p = Person2.find({
-        _id: person.registerId
-      });
-      return p[0] ? p[0].name: '-';
-    }
+    registerName: async (person) => {
+      const p = await personFunctions.getAPerson(person.registerId);
+      return p.name ? p.name: '-';
+    },
+    membershipType: async (person) => {
+      const p = await membershipFunctions.getMembershipActive(person._id.toString());
+      return p ? p.type: '-';
+    },
+    age: async (person) => {
+      const p = await DateUtil.getAge(person.birthDate);
+      return p;
+    },
   },
   Mutation: {
     createPerson(obj, { name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state,
       email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal }, context) {
       console.log('------', name);
-      return addPerson(name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal);
+      return personFunctions.addPerson(name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal);
+      // return addPerson(name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal);
     },
     updateStatePerson(obj, { ids, state, approvalId, approvalDate }, context) {
       return updateState(ids, state, approvalId, approvalDate);
