@@ -274,6 +274,10 @@ module.exports = {
       const p = await DateUtil.getAge(person.birthDate);
       return p;
     },
+    memberships: async (person) => {
+      const p = await membershipFunctions.getMemberships(person._id.toString());
+      return p;
+    },
   },
   Mutation: {
     createPerson(obj, { name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state,

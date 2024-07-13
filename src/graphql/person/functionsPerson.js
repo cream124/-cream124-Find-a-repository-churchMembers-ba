@@ -105,7 +105,7 @@ const addPerson = async (name, lastName, motherLastName, birthDate, gender, civi
       personId._id.toString(),
       "Activo",
       "Activo por registro.",
-      spiritual?.dateBaptized,
+      spiritual?.becameMembreDate,
       registerId
     );
   }

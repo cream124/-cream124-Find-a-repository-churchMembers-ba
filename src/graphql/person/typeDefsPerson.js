@@ -31,6 +31,7 @@ module.exports = gql`
     age: Int
     spiritual: Spiritual
     legal: Legal
+    memberships: [Membership]
   }
 
   type Spiritual {
@@ -49,6 +50,7 @@ module.exports = gql`
     palceBaptized: String
     dateBaptized: String
     becameMemberFor: String
+    becameMembreDate: String
     libroN: String
     folioN: String
     membershipRegistrationDate: String
@@ -72,6 +74,7 @@ module.exports = gql`
     palceBaptized: String
     dateBaptized: String
     becameMemberFor: String
+    becameMembreDate: String
     libroN: String
     folioN: String
     membershipRegistrationDate: String

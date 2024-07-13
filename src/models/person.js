@@ -41,6 +41,7 @@ module.exports = model("person", {
     palceBaptized: String,
     dateBaptized: String,
     becameMemberFor: String,
+    becameMembreDate: String,
     libroN: String,
     folioN: String,
     membershipRegistrationDate: String,
