@@ -266,6 +266,9 @@ module.exports = {
       const p = await personFunctions.getAPerson(person.registerId);
       return p.name ? p.name: '-';
     },
+    // password: async () => {
+    //   return '';
+    // },
     membershipType: async (person) => {
       const p = await membershipFunctions.getMembershipActive(person._id.toString());
       return p ? p.type: '-';
@@ -292,11 +295,11 @@ module.exports = {
 
     updatePerson(obj, { id, name, lastName, motherLastName, birthDate, gender, civilStatus,
       ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
-      userName, password, spiritual, legal }, context) {
+      userName, password, updatingUser, spiritual, legal }, context) {
       console.log('------', name);
-      return updatePerson(id, name, lastName, motherLastName, birthDate, gender, civilStatus,
+      return personFunctions.updatePerson(id, name, lastName, motherLastName, birthDate, gender, civilStatus,
         ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
-        userName, password, spiritual, legal );
+        userName, password, updatingUser, spiritual, legal );
     },
    
     loginPerson(_, {login: { userName, email, password}}) {

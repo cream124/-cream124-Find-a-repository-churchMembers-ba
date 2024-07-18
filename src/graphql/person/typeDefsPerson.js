@@ -226,6 +226,7 @@ module.exports = gql`
       user: Boolean
       userName: String
       password: String
+      updatingUser: Boolean
       spiritual: Spiritual1
       legal: Legal1
     ): Person

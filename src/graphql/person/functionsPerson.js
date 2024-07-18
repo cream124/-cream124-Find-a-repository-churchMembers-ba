@@ -13,7 +13,7 @@ const getPerson = async () => {
 };
 
 const getAPerson = async (_id) => {
-  if ( ObjectId.isValid(_id)) {  
+  if (ObjectId.isValid(_id)) {
     const d = await Person.findOne({ _id })
     return d;
   }
@@ -114,7 +114,7 @@ const addPerson = async (name, lastName, motherLastName, birthDate, gender, civi
 
 const updatePerson = async (_id, name, lastName, motherLastName, birthDate, gender, civilStatus,
   ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
-  userName, password, spiritual, legal) => {
+  userName, password, updatingUser, spiritual, legal) => {
 
   await validateNames(name, lastName, motherLastName, _id);
   await validateCi(ci, _id);
@@ -122,15 +122,28 @@ const updatePerson = async (_id, name, lastName, motherLastName, birthDate, gend
 
   var encryptedPassword = await bcrypt.hash(password, 10);
   // console.log('=encryptedPassword==========', encryptedPassword);
-  await Person.updateOne({ _id },
-    {
-      $set: {
-        name, lastName, motherLastName, birthDate, gender, civilStatus,
-        ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
-        userName, password, spiritual, legal
+  console.log('*******updatingUser*********', updatingUser)
+  if (updatingUser) {
+    await Person.updateOne({ _id },
+      {
+        $set: {
+          name, lastName, motherLastName, birthDate, gender, civilStatus,
+          ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
+          userName, password, spiritual, legal
+        }
       }
-    }
-  );
+    );
+  } else {
+    await Person.updateOne({ _id },
+      {
+        $set: {
+          name, lastName, motherLastName, birthDate, gender, civilStatus,
+          ci, photo, phone, address, location, state, uptadeId, updateDate, user,
+          userName, spiritual, legal
+        }
+      }
+    );
+  }
   return await Person.findOne({ _id });
 };
 
@@ -240,7 +253,8 @@ const deletePerson = async (_id) => {
 
 module.exports = {
   addPerson,
-  getAPerson
+  getAPerson,
+  updatePerson
   // getAllMemberships,
   // getMemberships,
   // getMembershipActive,
