@@ -10,7 +10,8 @@ const getAllMemberships = async () => {
 };
 
 const getMemberships = async (idPerson) => {
-  const p = Membership.find({ idPerson });
+  const p = Membership.find({ idPerson }).sort({ "registerDate": -1});
+  // const p = Day.find(parameter).sort({ "order": 1});
   return p;
 };
 
@@ -32,7 +33,8 @@ const addMembership = async (
   type,
   description,
   updateDate,
-  idRegister
+  idRegister,
+  registerDate
 ) => {
   //  const dateTime = await dateUtil.getDateInTimestamp( await dateUtil.getDateInFormat("04/04/2024", "12", "50"));
   //  console.log('---datetime---', dateTime);
@@ -50,6 +52,7 @@ const addMembership = async (
     description,
     updateDate,
     idRegister,
+    registerDate,
     state,
   });
   const pack = await Membership.findOne(idC);
@@ -62,7 +65,8 @@ const updateMembership = async (
   type,
   description,
   updateDate,
-  idRegister
+  idRegister,
+  registerDate
 ) => {
   const membershipActive = await getMembershipActive(idPerson);
   const _id = membershipActive._id;
@@ -72,7 +76,7 @@ const updateMembership = async (
       state
     }
   });
-  return addMembership(idPerson, type, description, updateDate, idRegister);
+  return addMembership(idPerson, type, description, updateDate, idRegister, registerDate);
 };
 
 const deleteMembership = async (_id) => {

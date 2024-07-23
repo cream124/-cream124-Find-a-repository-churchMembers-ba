@@ -12,5 +12,6 @@ module.exports = model("membership", {
   description: String,
   updateDate: String,
   idRegister: String,
+  registerDate: String,
   state: String,
 });

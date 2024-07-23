@@ -8,6 +8,8 @@ module.exports = gql`
     description: String
     updateDate: String
     idRegister: String
+    registerName: String
+    registerDate: String
     state: String
   }
  
@@ -24,6 +26,7 @@ module.exports = gql`
       description: String
       updateDate: String
       idRegister: String
+      registerDate: String
     ): Membership
 
     updateMembership(
@@ -32,6 +35,7 @@ module.exports = gql`
       description: String
       updateDate: String
       idRegister: String
+      registerDate: String
     ): Membership
 
     deleteMembership(id: String!): Membership

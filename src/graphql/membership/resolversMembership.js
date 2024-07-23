@@ -1,5 +1,5 @@
 const { UserInputError } = require('apollo-server');
-
+const personFunctions = require('../person/functionsPerson');
 const functions = require('./functionsMembership');
 // const functionsOffice = require('./functionsOffice');
 
@@ -17,15 +17,22 @@ module.exports = {
     },
   },
 
+  Membership: {
+    registerName: async (member) => {
+      const p = await personFunctions.getAPerson(member.idRegister);
+      return p.name ? `${p.name} ${p.lastName}`: '-';
+    },
+  },
+
   Mutation: {
-    createMembership(obj, {idPerson, type, description, updateDate, idRegister}, context) {
+    createMembership(obj, {idPerson, type, description, updateDate, idRegister, registerDate}, context) {
       // console.log('------', area);
-      return functions.addMembership(idPerson, type, description, updateDate, idRegister);
+      return functions.addMembership(idPerson, type, description, updateDate, idRegister, registerDate);
     },
 
-    updateMembership(obj, {idPerson, type, description, updateDate, idRegister}, context) {
+    updateMembership(obj, {idPerson, type, description, updateDate, idRegister, registerDate}, context) {
       // console.log('------', area);
-      return functions.updateMembership(idPerson, type, description, updateDate, idRegister);
+      return functions.updateMembership(idPerson, type, description, updateDate, idRegister, registerDate);
     },
 
     deleteMembership(_, {id}, context) {
