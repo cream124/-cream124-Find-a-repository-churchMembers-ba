@@ -302,6 +302,11 @@ module.exports = {
         userName, password, updatingUser, spiritual, legal );
     },
    
+    updateSpiritualPerson(obj, { id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime }, context) {
+      // console.log('------', name);
+      return personFunctions.updateSpirtualPerson(id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime );
+    },
+
     loginPerson(_, {login: { userName, email, password}}) {
       return loginPerson(userName, email, password);
     },

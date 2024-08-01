@@ -147,6 +147,18 @@ const updatePerson = async (_id, name, lastName, motherLastName, birthDate, gend
   return await Person.findOne({ _id });
 };
 
+const updateSpirtualPerson = async (_id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime) => {
+    await Person.updateOne({ _id },
+      {
+        $set: {
+          spiritual: { becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime},
+        }
+      }
+    );
+
+  return await Person.findOne({ _id });
+};
+
 const filterByStatePersons = async (state) => {
   const persons = await Person.find(state);
   return persons;
@@ -254,7 +266,8 @@ const deletePerson = async (_id) => {
 module.exports = {
   addPerson,
   getAPerson,
-  updatePerson
+  updatePerson, 
+  updateSpirtualPerson
   // getAllMemberships,
   // getMemberships,
   // getMembershipActive,

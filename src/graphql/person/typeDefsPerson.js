@@ -231,6 +231,16 @@ module.exports = gql`
       legal: Legal1
     ): Person
 
+    updateSpiritualPerson(
+      id: String!
+      becameMemberFor: String
+      becameMembreDate: String
+      libroN: String
+      folioN: String
+      membershipRegistrationDate: String
+      membershipRegistrationTime: String      
+    ): Person
+
     loginPerson(login: Login): PersonUser
 
     asRootPerson(id: ID!): Person
