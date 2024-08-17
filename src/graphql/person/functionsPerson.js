@@ -159,6 +159,18 @@ const updateSpirtualPerson = async (_id, becameMemberFor, becameMembreDate, libr
   return await Person.findOne({ _id });
 };
 
+const updateUserPerson = async (_id, user, email, level, password) => {
+  await Person.updateOne({ _id },
+    {
+      $set: {
+        user, email, level, password
+      }
+    }
+  );
+
+return await Person.findOne({ _id });
+};
+
 const filterByStatePersons = async (state) => {
   const persons = await Person.find(state);
   return persons;
@@ -267,8 +279,9 @@ module.exports = {
   addPerson,
   getAPerson,
   updatePerson, 
-  updateSpirtualPerson
-  // getAllMemberships,
+  updateSpirtualPerson,
+  updateUserPerson
+    // getAllMemberships,
   // getMemberships,
   // getMembershipActive,
   // getCustomeMembership,

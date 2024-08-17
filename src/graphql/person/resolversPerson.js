@@ -266,9 +266,9 @@ module.exports = {
       const p = await personFunctions.getAPerson(person.registerId);
       return p.name ? p.name: '-';
     },
-    // password: async () => {
-    //   return '';
-    // },
+    password: async () => {
+      return '';
+    },
     membershipType: async (person) => {
       const p = await membershipFunctions.getMembershipActive(person._id.toString());
       return p ? p.type: '-';
@@ -303,8 +303,11 @@ module.exports = {
     },
    
     updateSpiritualPerson(obj, { id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime }, context) {
-      // console.log('------', name);
       return personFunctions.updateSpirtualPerson(id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime );
+    },
+
+    updateUserPerson(obj, { id, user, email, level, password }, context) {
+      return personFunctions.updateUserPerson(id, user, email, level, password);
     },
 
     loginPerson(_, {login: { userName, email, password}}) {

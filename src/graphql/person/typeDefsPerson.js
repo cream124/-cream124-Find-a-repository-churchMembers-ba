@@ -241,6 +241,14 @@ module.exports = gql`
       membershipRegistrationTime: String      
     ): Person
 
+    updateUserPerson(
+      id: String!
+      user: Boolean
+      email: String
+      level: Int
+      password: String
+    ): Person
+
     loginPerson(login: Login): PersonUser
 
     asRootPerson(id: ID!): Person
