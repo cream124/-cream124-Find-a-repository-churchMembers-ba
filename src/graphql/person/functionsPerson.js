@@ -1,4 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
+const { UserInputError } = require('apollo-server');
 const Person = require('../../models/person');
 const membershipFunctions = require('../membership/functionsMembership');
 
@@ -50,11 +51,13 @@ const validateCi = async (ci, id) => {
   }
 };
 
-const validateEmail = async (email, user) => {
+const validateEmail = async (email, user, id) => {
   if (user) {
     const filter = {
-      email
+      email,
+      _id: { $ne: id }
     }
+    console.log('-----filter----------', filter);
     const persons = await Person.find(filter);
     if (persons.length > 0) {
       throw new UserInputError('Ya está registrado el usuario con el mismo Email', {
@@ -159,7 +162,35 @@ const updateSpirtualPerson = async (_id, becameMemberFor, becameMembreDate, libr
   return await Person.findOne({ _id });
 };
 
-const updateUserPerson = async (_id, user, email, level, password) => {
+const updatePassword = async (_id, oldPassword, newPassword) => {
+  
+  const user = await Person.findOne({ _id });
+
+  if (user && (await bcrypt.compare(oldPassword, user.password))) {
+    const password =  await bcrypt.hash(newPassword, 10);
+    await Person.updateOne({ _id },
+      {
+        $set: {
+          password
+        }
+      }
+    );
+    return user;
+  } else {
+    // console.log('Error-------------');
+    throw new UserInputError('La contraseña es incorrecta', {
+      argumentName: 'password'
+    });
+  }
+};
+
+const updateUserPerson = async (_id, user, email, level, password1) => {
+  
+  
+  const password = password1 ? await bcrypt.hash(password1, 10) : undefined;
+  if (email) {
+    await validateEmail(email, true, _id);
+  }
   await Person.updateOne({ _id },
     {
       $set: {
@@ -280,7 +311,8 @@ module.exports = {
   getAPerson,
   updatePerson, 
   updateSpirtualPerson,
-  updateUserPerson
+  updateUserPerson,
+  updatePassword
     // getAllMemberships,
   // getMemberships,
   // getMembershipActive,

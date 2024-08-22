@@ -249,6 +249,13 @@ module.exports = gql`
       password: String
     ): Person
 
+      updatePassword(
+      id: String!
+      password: String
+      newPassword: String
+    ): Person
+
+    
     loginPerson(login: Login): PersonUser
 
     asRootPerson(id: ID!): Person

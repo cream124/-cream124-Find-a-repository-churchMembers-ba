@@ -310,6 +310,11 @@ module.exports = {
       return personFunctions.updateUserPerson(id, user, email, level, password);
     },
 
+    updatePassword(obj, { id,  password, newPassword }, context) {
+      return personFunctions.updatePassword(id, password, newPassword);
+      // return personFunctions.updateUserPerson(id, '', '', 1, '');
+    },
+
     loginPerson(_, {login: { userName, email, password}}) {
       return loginPerson(userName, email, password);
     },
