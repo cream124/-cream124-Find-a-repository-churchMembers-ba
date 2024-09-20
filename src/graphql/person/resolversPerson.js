@@ -15,20 +15,20 @@ const getPerson = async () => {
   return p;
 };
 
-const getAPerson = async(_id) => {
-  const d = await Person.findOne({_id})
+const getAPerson = async (_id) => {
+  const d = await Person.findOne({ _id })
   return d;
 };
 
 const validateNames = async (name, lastName, motherLastName, id) => {
-  const filter= {
+  const filter = {
     name,
-    lastName, 
+    lastName,
     motherLastName,
-    _id: {$ne: id}
+    _id: { $ne: id }
   }
   const persons = await Person.find(filter);
-  if(persons.length > 0) {
+  if (persons.length > 0) {
     throw new UserInputError('Ya está registrado el usuario con los mismos nombres y apellidos', {
       argumentName: 'id'
     });
@@ -36,13 +36,13 @@ const validateNames = async (name, lastName, motherLastName, id) => {
 };
 
 const validateCi = async (ci, id) => {
-  if(ci.length > 0) {
-    const filter= {
+  if (ci.length > 0) {
+    const filter = {
       ci,
-      _id: {$ne: id}
+      _id: { $ne: id }
     }
     const persons = await Person.find(filter);
-    if(persons.length > 0) {
+    if (persons.length > 0) {
       throw new UserInputError('Ya está registrado el usuario con el mismo CI', {
         argumentName: 'id'
       });
@@ -51,12 +51,12 @@ const validateCi = async (ci, id) => {
 };
 
 const validateEmail = async (email, user) => {
-  if(user){
-    const filter= {
+  if (user) {
+    const filter = {
       email
     }
     const persons = await Person.find(filter);
-    if(persons.length > 0) {
+    if (persons.length > 0) {
       throw new UserInputError('Ya está registrado el usuario con el mismo Email', {
         argumentName: 'id'
       });
@@ -65,61 +65,62 @@ const validateEmail = async (email, user) => {
 };
 
 const addPerson = async (name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal) => {
- console.log('=sp==========', spiritual);
-    await validateNames(name, lastName, motherLastName);
-    await validateCi(ci);
-    await validateEmail(email, user);
+  console.log('=sp==========', spiritual);
+  await validateNames(name, lastName, motherLastName);
+  await validateCi(ci);
+  await validateEmail(email, user);
 
-    var encryptedPassword = await bcrypt.hash(password, 10);
-    // console.log('=encryptedPassword==========', encryptedPassword);
-    const personId = await Person.create({
-      name,
-      lastName,
-      motherLastName,
-      birthDate, 
-      gender,
-      civilStatus,
-      ci, 
-      photo,
-      phone, 
-      address, 
-      location, 
-      state, 
-      email, 
-      registerId,
-      registerDate,
-      approvalId, 
-      approvalDate, 
-      user, 
-      level, 
-      userName, 
-      password: encryptedPassword,
-      spiritual,
-      legal
-    });
-    console.log('======', personId);
-    return Person.findOne(personId);
+  var encryptedPassword = await bcrypt.hash(password, 10);
+  // console.log('=encryptedPassword==========', encryptedPassword);
+  const personId = await Person.create({
+    name,
+    lastName,
+    motherLastName,
+    birthDate,
+    gender,
+    civilStatus,
+    ci,
+    photo,
+    phone,
+    address,
+    location,
+    state,
+    email,
+    registerId,
+    registerDate,
+    approvalId,
+    approvalDate,
+    user,
+    level,
+    userName,
+    password: encryptedPassword,
+    spiritual,
+    legal
+  });
+  console.log('======', personId);
+  return Person.findOne(personId);
 };
 
 const updatePerson = async (_id, name, lastName, motherLastName, birthDate, gender, civilStatus,
-  ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
-  userName, password, spiritual, legal ) => {
- 
+  ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
+  userName, password, spiritual, legal) => {
+
   await validateNames(name, lastName, motherLastName, _id);
   await validateCi(ci, _id);
   // await validateEmail(email, user);
 
   var encryptedPassword = await bcrypt.hash(password, 10);
   // console.log('=encryptedPassword==========', encryptedPassword);
-  await Person.updateOne({_id},
+  await Person.updateOne({ _id },
     {
-      $set: { name, lastName, motherLastName, birthDate, gender, civilStatus,
-      ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
-      userName, password, spiritual, legal 
+      $set: {
+        name, lastName, motherLastName, birthDate, gender, civilStatus,
+        ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
+        userName, password, spiritual, legal
       }
     }
   );
-  return await Person.findOne({_id});
+  return await Person.findOne({ _id });
 };
 
 const filterByStatePersons = async (state) => {
@@ -127,17 +128,120 @@ const filterByStatePersons = async (state) => {
   return persons;
 };
 
+const getBirthday = async (persons, startDate, endDate ) => {
+  const filteredPerson = persons.filter(function (per) {
+    dayjs.extend(customParseFormat);
+    let fe = dayjs(per.birthDate);
+    const fe1 = dayjs(startDate, 'DD-MM-YYYY');
+    let fe2 = dayjs(endDate, 'DD-MM-YYYY');
+    const year = fe1.year();
+    fe = fe.year(year);
+    fe2 = fe2.year(year);
+    return fe >= fe1 && fe2 >= fe
+  });
+  return filteredPerson;
+}
+
+const getBetweenDates = async (persons, startDate, endDate, field ) => {
+  const filteredPerson = persons.filter(function (per) {
+    dayjs.extend(customParseFormat);
+    let fe = dayjs(per[field]);
+    const fe1 = dayjs(startDate, 'DD-MM-YYYY');
+    let fe2 = dayjs(endDate, 'DD-MM-YYYY');
+    // const year = fe1.year();
+    // fe = fe.year(year);
+    // fe2 = fe2.year(year);
+    return fe >= fe1 && fe2 >= fe
+  });
+  return filteredPerson;
+}
+
 const filterPersons = async (filter) => {
+  /**
+   * searchType: names, text, bool  {"field": "spiritual.christian", "value": "false"}
+   */
   console.log('=persons=00======', filter);
   // const filter = {
   //   "state": "registered",
   //   "startDate": "04-12-2000",
-  //   "endDate": "04-12-2000"
+  //   "endDate": "04-12-2000",
+  //    "field": "name",
+  //    "value": "ab"    
+  // }
+  const regex = new RegExp(["", filter.value, ""].join(""), "i");
+  
+  // var regex = new RegExp(["^", va, "$"].join(""), "i");
+  const filter2 = {
+    "state": "registered",
+    "startDate": "04-12-2000",
+    "endDate": "04-12-2000",
+    "field": "name",
+    "value": "ab",
+    // "name": { $regex: '/' + 'ab' + '/i' }
+    "name": regex
+  }
+  const filter3 ={
+    // state: "active",
+    $or: [{name: {$regex: /ab/}}, {lastName: {$regex: /ma/}}]
+    
+  }
+  const filter4 ={
+    "spiritual.christian" : true,
+    $or: [{name: regex}, {lastName: regex}]
+    
+  }
+
+  // console.log('=filter=4======', filter4);
+  //   return Person.find(filter4);
+
+
+  if (filter.searchType === "names") {
+    const nameFilter ={
+      $or: [{name: regex}, {lastName: regex}]
+    }
+    console.log('=filter=names======', {...nameFilter, ...filter});
+    return Person.find({ ...nameFilter, ...filter});
+  }
+
+  
+  if (filter.searchType === "text") {
+    filter[filter.field] = regex;
+    console.log('=filter=text======', filter);
+    return Person.find( filter);
+  }
+  if (filter.searchType === "bool") {
+    filter[filter.field] = filter.value;
+    console.log('=filter=text======', filter);
+    return Person.find( filter);
+  }
+
+  if (filter.searchType === "birthdate") {
+    const persons = await Person.find(filter);
+    console.log('=filter=birthdate======', filter);
+    return getBirthday(persons, filter.startDate, filter.endDate)
+    // filter[filter.field] = filter.value;
+    
+    // return Person.find( filter);
+  }
+
+  if (filter.searchType === "betweenDates") {
+    const persons = await Person.find(filter);
+    console.log('=filter=birthdate======', filter);
+    return getBetweenDates(persons, filter.startDate, filter.endDate, filter.field)
+    // filter[filter.field] = filter.value;
+    
+    // return Person.find( filter);
+  }
+  // getBirthday
+  // if (filter.field) {
+  //   // filter[filter.field] = regex;
+  //   console.log('=filter=00======', {...filter4, ...filter});
+  //   return Person.find({ ...filter4, ...filter});
   // }
   const persons = await Person.find(filter);
-  // console.log('=persons=======', persons);
+  console.log('=persons=======', filter);
 
-  if(!filter.startDate){
+  if (!filter.startDate) {
     return persons;
   }
 
@@ -153,11 +257,11 @@ const filterPersons = async (filter) => {
     let fe2 = dayjs(endDate, 'DD-MM-YYYY');
     // console.log('****fe1******', fe1)
     // console.log('****fe2******', fe2)
-    
+
     const year = fe1.year();
     fe = fe.year(year);
     fe2 = fe2.year(year);
-    
+
     return fe >= fe1 && fe2 >= fe
     // return value !== null && fe >= fe1 && fe2 >= fe
   });
@@ -167,25 +271,25 @@ const filterPersons = async (filter) => {
 
 const updateState = async (ids, state, approvalId, approvalDate) => {
   for (const _id of ids) {
-    await Person.updateOne({_id}, {
+    await Person.updateOne({ _id }, {
       $set: {
         state,
         approvalId,
         approvalDate
       }
-      
+
     });
   }
-  return await Person.findOne({_id: ids[0]});
+  return await Person.findOne({ _id: ids[0] });
 };
 
 const loginPerson = async (userName, email, password) => {
-  const user = await Person.findOne({email});
- 
+  const user = await Person.findOne({ email });
+
   if (user && (await bcrypt.compare(password, user.password))) {
-    if(user.state === 'active') {
+    if (user.state === 'active') {
       const token = jwt.sign(
-        {_id: user._id, email, level: user.level, name: user.name},
+        { _id: user._id, email, level: user.level, name: user.name },
         "UNSAFE_STRING",
         {
           expiresIn: "2h"
@@ -197,7 +301,7 @@ const loginPerson = async (userName, email, password) => {
       console.log('Error-inactive user------------');
       throw new UserInputError('El usuario no está activo aun', {
         argumentName: 'id'
-      });  
+      });
     }
   } else {
     console.log('Error-------------');
@@ -208,20 +312,20 @@ const loginPerson = async (userName, email, password) => {
 };
 
 const asARootPerson = async (_id) => {
-  await Person.updateOne({_id}, {
+  await Person.updateOne({ _id }, {
     $set: {
-        level: 700,
-      }
-      
-    });
-  
-  return await Person.findOne({_id});
+      level: 700,
+    }
+
+  });
+
+  return await Person.findOne({ _id });
 };
 
 const deletePerson = async (_id) => {
-  const user = await Person.findOne({_id});
+  const user = await Person.findOne({ _id });
   // await Person.deleteOne({_id});
-  await Person.remove({_id});
+  await Person.remove({ _id });
   return user;
 };
 
@@ -236,8 +340,8 @@ module.exports = {
       if (!context.isAuth) {
         throw new Error('Unauthenticated')
       }
-      if (context.level === 700 ) {
-        return filterByStatePersons({state});
+      if (context.level === 700) {
+        return filterByStatePersons({ state });
       }
       // return filterByStatePersons({state});
       // return filterByStatePersons({state, registerId: context._id});
@@ -264,14 +368,14 @@ module.exports = {
   Person: {
     registerName: async (person) => {
       const p = await personFunctions.getAPerson(person.registerId);
-      return p.name ? p.name: '-';
+      return p.name ? p.name : '-';
     },
     password: async () => {
       return '';
     },
     membershipType: async (person) => {
       const p = await membershipFunctions.getMembershipActive(person._id.toString());
-      return p ? p.type: '-';
+      return p ? p.type : '-';
     },
     age: async (person) => {
       const p = await DateUtil.getAge(person.birthDate);
@@ -294,36 +398,36 @@ module.exports = {
     },
 
     updatePerson(obj, { id, name, lastName, motherLastName, birthDate, gender, civilStatus,
-      ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
+      ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
       userName, password, updatingUser, spiritual, legal }, context) {
       console.log('------', name);
       return personFunctions.updatePerson(id, name, lastName, motherLastName, birthDate, gender, civilStatus,
-        ci, photo, phone, address,  location, state, email, uptadeId, updateDate, user,
-        userName, password, updatingUser, spiritual, legal );
+        ci, photo, phone, address, location, state, email, uptadeId, updateDate, user,
+        userName, password, updatingUser, spiritual, legal);
     },
-   
+
     updateSpiritualPerson(obj, { id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime }, context) {
-      return personFunctions.updateSpirtualPerson(id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime );
+      return personFunctions.updateSpirtualPerson(id, becameMemberFor, becameMembreDate, libroN, folioN, membershipRegistrationDate, membershipRegistrationTime);
     },
 
     updateUserPerson(obj, { id, user, email, level, password }, context) {
       return personFunctions.updateUserPerson(id, user, email, level, password);
     },
 
-    updatePassword(obj, { id,  password, newPassword }, context) {
+    updatePassword(obj, { id, password, newPassword }, context) {
       return personFunctions.updatePassword(id, password, newPassword);
       // return personFunctions.updateUserPerson(id, '', '', 1, '');
     },
 
-    loginPerson(_, {login: { userName, email, password}}) {
+    loginPerson(_, { login: { userName, email, password } }) {
       return loginPerson(userName, email, password);
     },
 
-    asRootPerson(_, {id}, contex) {
+    asRootPerson(_, { id }, contex) {
       return asARootPerson(id);
     },
 
-    deletePerson(_, {id}, context) {
+    deletePerson(_, { id }, context) {
       return deletePerson(id);
     }
   }

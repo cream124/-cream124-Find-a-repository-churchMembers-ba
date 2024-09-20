@@ -149,9 +149,12 @@ module.exports = gql`
   }
 
   input Filter {
+    searchType: String  
     state: String
     startDate: String
     endDate: String
+    field: String
+    value: String
   }
 
   input RegisterPerson {
