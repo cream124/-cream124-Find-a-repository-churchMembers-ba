@@ -157,10 +157,9 @@ const getBetweenDates = async (persons, startDate, endDate, field ) => {
 }
 
 const getBetweenAge = async (persons, startDate, endDate, field ) => {
-  const filteredPerson = persons.filter(function (per) {
-    dayjs.extend(customParseFormat);
-    const age=DateUtil.getAge(per[field]);
-    // let fe = dayjs(per[field]);
+  const filteredPerson = await persons.filter( function (per) {
+    const age=  DateUtil.getAge(per[field]);
+    console.log('---age-------', age)
     const fe1 = parseInt(startDate);
     let fe2 = parseInt(endDate);
     return age >= fe1 && fe2 >= age
@@ -248,7 +247,7 @@ const filterPersons = async (filter) => {
   if (filter.searchType.includes("betweenAge")) {
     const persons = await Person.find(filter);
     console.log('=filter=age======', filter);
-    return getBetweenAge(persons, filter.startDate, filter.endDate, filter.field)
+    return getBetweenAge(persons, filter.startDate, filter.endDate, filter.field);
     // filter[filter.field] = filter.value;
     
     // return Person.find( filter);

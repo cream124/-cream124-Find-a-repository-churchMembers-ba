@@ -29,7 +29,7 @@ const getDateAddMinites =  (date, hour, minute, addMinutes) => {
  * @param  birthDate  in ISO format as "2024-05-02T04:00:00.000Z"
  * @returns Age in Int format
  */
-const getAge =  async (birthDate) => {
+const getAge =  (birthDate) => {
     const age = parseInt(dayjs().diff(dayjs(birthDate), 'year'));
     return age;
 };
