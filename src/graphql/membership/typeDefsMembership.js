@@ -39,5 +39,7 @@ module.exports = gql`
     ): Membership
 
     deleteMembership(id: String!): Membership
+    
+    deleteMembershipByPersonId(id: String!): Membership
   }
 `;

@@ -85,6 +85,12 @@ const deleteMembership = async (_id) => {
   return p;
 };
 
+const deleteMembershipByPersonId = async (idPerson) => {
+  const p = await Membership.findOne({ idPerson });
+  await Membership.remove({ idPerson });
+  return p;
+}; 
+
 module.exports = {
   getAllMemberships,
   getMemberships,
@@ -93,4 +99,5 @@ module.exports = {
   addMembership,
   updateMembership,
   deleteMembership,
+  deleteMembershipByPersonId,
 };

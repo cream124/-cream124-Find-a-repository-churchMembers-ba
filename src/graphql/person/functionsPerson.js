@@ -67,10 +67,11 @@ const validateEmail = async (email, user, id) => {
   }
 };
 
+//ssss
 const addPerson = async (name, lastName, motherLastName, birthDate, gender, civilStatus, ci, photo, phone, address, location, state, email, registerId, registerDate, approvalId, approvalDate, user, level, userName, password, spiritual, legal) => {
   console.log('=sp==========', spiritual);
   await validateNames(name, lastName, motherLastName);
-  await validateCi(ci);
+  // await validateCi(ci);
   await validateEmail(email, user);
 
   var encryptedPassword = await bcrypt.hash(password, 10);
@@ -101,7 +102,7 @@ const addPerson = async (name, lastName, motherLastName, birthDate, gender, civi
     legal
   });
   console.log('==._id.toString()====', personId._id.toString());
-  console.log('==spiritual.baptized====', spiritual.baptized);
+  // console.log('==spiritual.baptized====', spiritual.baptized);
 
   if (spiritual.baptized) {
     await membershipFunctions.addMembership(
@@ -299,8 +300,9 @@ const asARootPerson = async (_id) => {
 };
 
 const deletePerson = async (_id) => {
+  const resp = await membershipFunctions.deleteMembershipByPersonId(_id);
+  // console.log('*********resp***', resp);
   const user = await Person.findOne({ _id });
-  // await Person.deleteOne({_id});
   await Person.remove({ _id });
   return user;
 };
@@ -312,7 +314,8 @@ module.exports = {
   updatePerson, 
   updateSpirtualPerson,
   updateUserPerson,
-  updatePassword
+  updatePassword,
+  deletePerson
     // getAllMemberships,
   // getMemberships,
   // getMembershipActive,

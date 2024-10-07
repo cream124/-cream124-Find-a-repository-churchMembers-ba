@@ -5,6 +5,7 @@ module.exports = gql`
 
 type Mutation {  
   loadRootPerson(id: String!): Person
+  loadAllPerson(id: String!): Person
 }
 
 `;

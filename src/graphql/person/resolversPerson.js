@@ -448,7 +448,7 @@ module.exports = {
     },
 
     deletePerson(_, { id }, context) {
-      return deletePerson(id);
+      return personFunctions.deletePerson(id);
     }
   }
 };

@@ -36,7 +36,7 @@ https://learn.microsoft.com/es-mx/windows/wsl/install-manual#step-4---download-t
       -- show collections;
 
       db.[coleccion].find();
-      db.movies.find();
+      db.Membership.find();
 7. Proceed to create the replica set (Allows transactions to work):
    `rs.initiate( { _id: "rs0", version: 1, members: [ { _id: 0, host : "mongodb1:27017" }]} )`
 8. Verify that replica was init correctly:

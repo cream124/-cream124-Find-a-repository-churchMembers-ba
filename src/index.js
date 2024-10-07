@@ -8,7 +8,8 @@ const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const authentication = require('./middleware/is-auth');
 
-const MONGODB = 'mongodb://localhost/churchdb';
+// const MONGODB = 'mongodb://127.0.0.1:27017/churchdb?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.1';
+const MONGODB = 'mongodb://127.0.0.1/churchdb';
 
 const main = async () => {
   await mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });

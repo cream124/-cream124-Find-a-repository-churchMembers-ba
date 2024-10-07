@@ -38,6 +38,11 @@ module.exports = {
     deleteMembership(_, {id}, context) {
       return functions.deleteMembership(id);
     },
+
+    
+    deleteMembershipByPersonId(_, {id}, context) {
+      return functions.deleteMembership(id);
+    },
     
   }
 };
